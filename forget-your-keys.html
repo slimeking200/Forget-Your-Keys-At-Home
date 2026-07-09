@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Forget Your Keys At Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --dusk-edge: #0e1729;
+    --dusk:      #1b2a46;
+    --dusk-lift: #24365a;
+    --lamp:      #f4b45f;
+    --lamp-soft: #ffd89b;
+    --brick:     #b56a4a;
+    --paper:     #f2ead9;
+    --muted:     #9db0cc;
+    --line:      rgba(244,180,95,0.22);
+    --display: "Bricolage Grotesque", system-ui, sans-serif;
+    --body: "Literata", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    font-family: var(--body);
+    color: var(--paper);
+    background:
+      radial-gradient(130% 90% at 50% -12%, rgba(244,180,95,0.20), transparent 46%),
+      linear-gradient(var(--dusk), var(--dusk-edge));
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The porch light: the one warm thing you can't reach. */
+  .lamp {
+    position: fixed;
+    top: -140px; left: 50%;
+    width: 460px; height: 460px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(255,216,155,0.55), rgba(244,180,95,0.12) 42%, transparent 68%);
+    pointer-events: none;
+    z-index: 0;
+    animation: flicker 7s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+    50%      { opacity: 1;    transform: translateX(-50%) scale(1.04); }
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 46px 22px 120px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--lamp);
+    text-align: center;
+    margin: 0 0 6px;
+  }
+  .title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(1.9rem, 8vw, 2.9rem);
+    line-height: 1.02;
+    text-align: center;
+    margin: 0 0 30px;
+    color: var(--paper);
+    text-wrap: balance;
+  }
+
+  .stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .stage.enter { animation: rise 0.5s cubic-bezier(.2,.7,.2,1); }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scene-text {
+    font-size: clamp(1.12rem, 4.4vw, 1.34rem);
+    line-height: 1.6;
+    margin: 0 0 30px;
+    text-wrap: pretty;
+  }
+  .scene-text p { margin: 0 0 0.85em; }
+  .scene-text p:last-child { margin-bottom: 0; }
+
+  .choices { display: flex; flex-direction: column; gap: 12px; }
+
+  .choice {
+    font-family: var(--body);
+    font-size: 1.04rem;
+    text-align: left;
+    color: var(--paper);
+    background: rgba(36,54,90,0.55);
+    border: 1px solid rgba(157,176,204,0.18);
+    border-left: 3px solid var(--lamp);
+    border-radius: 12px;
+    padding: 15px 17px;
+    min-height: 52px;
+    cursor: pointer;
+    transition: transform .12s ease, background .18s ease, border-color .18s ease;
+  }
+  .choice::before { content: "→"; color: var(--lamp); margin-right: 10px; opacity: 0.8; }
+  .choice:hover, .choice:focus-visible {
+    background: rgba(45,68,112,0.85);
+    border-left-color: var(--lamp-soft);
+    transform: translateX(3px);
+    outline: none;
+  }
+  .choice:focus-visible { box-shadow: 0 0 0 2px var(--lamp); }
+  .choice:active { transform: translateX(1px) scale(0.995); }
+
+  /* Ending card */
+  .ending {
+    text-align: center;
+    background: radial-gradient(120% 130% at 50% 0%, rgba(244,180,95,0.16), rgba(36,54,90,0.5));
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 34px 24px;
+  }
+  .ending-emoji { font-size: 3.4rem; line-height: 1; margin-bottom: 12px; }
+  .ending-kicker {
+    font-family: var(--display);
+    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .badge-new {
+    display: inline-block;
+    font-family: var(--display); font-weight: 700;
+    font-size: 0.62rem; letter-spacing: 0.18em;
+    color: var(--dusk-edge); background: var(--lamp);
+    padding: 3px 9px; border-radius: 999px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  .ending-name {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(1.6rem, 6.5vw, 2.1rem);
+    margin: 0 0 14px; color: var(--lamp-soft);
+  }
+  .ending-text { font-size: 1.1rem; line-height: 1.6; margin: 0 auto 26px; max-width: 44ch; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .btn {
+    font-family: var(--display); font-weight: 600; font-size: 0.96rem;
+    padding: 13px 20px; border-radius: 12px; cursor: pointer;
+    border: 1px solid var(--line); color: var(--paper);
+    background: rgba(36,54,90,0.6); transition: transform .12s, background .18s;
+  }
+  .btn:hover, .btn:focus-visible { background: rgba(45,68,112,0.9); outline: none; transform: translateY(-1px); }
+  .btn:focus-visible { box-shadow: 0 0 0 2px var(--lamp); }
+  .btn-primary { background: var(--lamp); color: var(--dusk-edge); border-color: var(--lamp); }
+  .btn-primary:hover, .btn-primary:focus-visible { background: var(--lamp-soft); }
+
+  /* Keyring (collection) */
+  .keyring-head { text-align: center; margin-bottom: 4px; }
+  .keyring-sub { text-align: center; color: var(--muted); margin: 0 0 26px; font-size: 0.98rem; }
+  .tags { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 11px; }
+  .tag {
+    border-radius: 12px; padding: 14px 13px; min-height: 78px;
+    display: flex; flex-direction: column; gap: 4px;
+    border: 1px solid rgba(157,176,204,0.15);
+  }
+  .tag.found { background: rgba(244,180,95,0.10); border-color: var(--line); }
+  .tag.locked { background: rgba(20,32,55,0.55); }
+  .tag-emoji { font-size: 1.5rem; line-height: 1; }
+  .tag.locked .tag-emoji { filter: grayscale(1); opacity: 0.4; }
+  .tag-name { font-family: var(--display); font-weight: 600; font-size: 0.92rem; }
+  .tag.found .tag-name { color: var(--lamp-soft); }
+  .tag.locked .tag-name { color: var(--muted); }
+
+  .reset {
+    display: block; margin: 30px auto 0; background: none; border: none;
+    color: var(--muted); font-family: var(--display); font-size: 0.8rem;
+    letter-spacing: 0.08em; cursor: pointer; text-decoration: underline; opacity: 0.7;
+  }
+  .reset:hover { opacity: 1; color: var(--brick); }
+
+  /* The doormat: persistent HUD stitched into a coir welcome mat. */
+  .mat {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 20px;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0 2px, transparent 2px 5px),
+      linear-gradient(#7d4a35, #6a3d2b);
+    border-top: 3px solid #4c2c1f;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.35);
+  }
+  .mat-label {
+    font-family: var(--display); font-weight: 800;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #f3ddc4; font-size: 0.82rem;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+  }
+  .mat-count { color: var(--lamp-soft); }
+  .mat-btn {
+    font-family: var(--display); font-weight: 600; font-size: 0.8rem;
+    letter-spacing: 0.06em; padding: 8px 14px; border-radius: 999px;
+    background: rgba(0,0,0,0.22); color: #f3ddc4;
+    border: 1px solid rgba(0,0,0,0.3); cursor: pointer; white-space: nowrap;
+  }
+  .mat-btn:hover, .mat-btn:focus-visible { background: rgba(0,0,0,0.38); outline: none; }
+  .mat-btn:focus-visible { box-shadow: 0 0 0 2px var(--lamp-soft); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lamp { animation: none; }
+    .stage.enter { animation: none; }
+    .choice, .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="lamp" aria-hidden="true"></div>
+  <main class="wrap">
+    <div class="stage" id="stage" aria-live="polite"></div>
+  </main>
+  <footer class="mat">
+    <span class="mat-label">Welcome&nbsp;·&nbsp;<span class="mat-count" id="mat-count">0 / 0</span> keys</span>
+    <button class="mat-btn" id="keyring-btn" type="button">🔑 Keyring</button>
+  </footer>
+
+<script>
+/* ============================================================
+   FORGET YOUR KEYS AT HOME
+   ============================================================
+   ADD YOUR STORY BELOW. You never touch the engine underneath.
+
+   A SCENE — a moment with choices:
+     scene_id: {
+       text: "What the player reads. Blank lines become paragraphs.",
+       choices: [
+         { text: "The tappable button label", to: "some_other_id" },
+       ],
+     }
+
+   AN ENDING — a dead end the player collects:
+     ending_id: {
+       ending: true,
+       name: "Name shown on the keyring",
+       emoji: "🔑",            // optional, purely decorative
+       text: "The final line before Game Over.",
+     }
+
+   RULES OF THUMB
+   • Every "to" must exactly match a scene_id or ending_id.
+   • Choices may point at scenes you already wrote — branches can
+     merge and loop, so you never write the same path twice.
+   • The ending total counts itself. Add an ending, done.
+   • Open the browser console (F12) — broken links and orphaned
+     scenes are listed for you on every load.
+
+   GROWING BIG LATER
+   • This whole object can be split across files and merged:
+       const STORY = { start: "locked_out",
+         scenes: { ...chapterFront, ...chapterBackyard, ...endings } };
+   ============================================================ */
+
+const STORY = {
+  start: "locked_out",
+
+  scenes: {
+
+    /* ---------- OPENING ---------- */
+    locked_out: {
+      text:
+        "The door clicks shut behind you. That specific, final click.\n\n" +
+        "You pat your pockets. Phone, wallet, gum. No keys. They're on the kitchen counter, exactly where you can see them through the window and cannot reach them.\n\n" +
+        "So. What now?",
+      choices: [
+        { text: "Check under the doormat",        to: "doormat" },
+        { text: "Try the back window",             to: "back_window" },
+        { text: "Knock on the neighbor's door",    to: "neighbor" },
+        { text: "Call a locksmith",                to: "locksmith" },
+        { text: "Just… sit down and wait",         to: "wait" },
+        { text: "Try the garage",                  to: "garage" },
+      ],
+    },
+
+    /* ---------- DOORMAT BRANCH ---------- */
+    doormat: {
+      text:
+        "You flip the mat. Underneath: a pale rectangle of untouched concrete, one very confused woodlouse, and — wait.\n\n" +
+        "Is that a key, or a dead spider?",
+      choices: [
+        { text: "Grab the key",                    to: "end_spare_key" },
+        { text: "It's a spider. Try the flowerpot", to: "flowerpot" },
+        { text: "Move your head back to get a closer look", to: "end_bump_head"},
+      ],
+    },
+     end_bump_head: {
+       ending: true,
+       name: "Ambulance Ending",
+       emoji: "🚑",            // optional, purely decorative
+       text: "You move your head back, and bump your head into the door. your vision blurrs as you pass out, you awake in a ambulance your roommate called for you when he discovered your unconcous body.",
+     },
+    flowerpot: {
+      text: "The geraniums stare back at you. Past-you might have buried a spare in here. Past-you was an optimist.",
+      choices: [
+        { text: "Dig through the soil",            to: "end_muddy_key" },
+        { text: "Kick the pot in frustration",     to: "end_broken_pot" },
+        { text: "Pick up the pot",                 to: "holding_pot" },
+      ],
+    },
+     holding_pot: {
+       text: "You pick up the pot, but what now?",
+       choices: [
+         { text: "Put it back down", to: "flowerpot" },
+         { text: "Throw it at the window", to: "end_breaking_and_entering"}
+       ],
+     },
+     end_breaking_and_entering: {
+       ending: true,
+       name: "Breaking And Entering",
+       emoji: "🪴🪟",            // optional, purely decorative
+       text: "You hurl the flowerpot at the window, which shatters. \n\n" +
+             "Now you need to fix the window.",
+     },
+
+    /* ---------- WINDOW / CLIMBING BRANCH ---------- */
+    back_window: {
+      text: "The kitchen window is cracked open exactly one inch. The universe is taunting you specifically.",
+      choices: [
+        { text: "Squeeze through the gap",         to: "squeeze" },
+        { text: "Fetch the ladder for upstairs",   to: "ladder" },
+        { text: "Attempt to shatter the window",   to: "end_break_window"},
+      ],
+    },
+     end_break_window: {
+       ending: true,
+       name: "Broken Window",
+       emoji: "🪟🔨",            // optional, purely decorative
+       text: "You shatter the window and crawl through, you are covered in broken glass, and need to buy a new window, but you are home.",
+     },
+    squeeze: {
+      text: "You get your head and one shoulder through. Progress! Also: your ribs have opinions.",
+      choices: [
+        { text: "Push harder. Commit.",            to: "end_stuck_window" },
+        { text: "Ease the window up gently first", to: "end_window_win" },
+      ],
+    },
+    ladder: {
+      text: "The ladder from the shed is aluminum, slightly bent, and older than you. You lean it against the wall. It sings a little.",
+      choices: [
+        { text: "Climb to the balcony",            to: "balcony" },
+        { text: "This is a terrible idea. Climb down", to: "neighbor" },
+      ],
+    },
+    balcony: {
+      text: "Halfway up, the ladder shifts. You freeze. The balcony door is right there — and it looks unlocked.",
+      choices: [
+        { text: "Lunge for the balcony rail",      to: "end_balcony_win" },
+        { text: "Your foot slips",                 to: "end_fall" },
+      ],
+    },
+
+    /* ---------- NEIGHBOR BRANCH ---------- */
+    neighbor: {
+      text:
+        "You knock. Dennis opens the door in a bathrobe, holding a mug that says WORLD'S OKAYEST GARDENER.\n\n" +
+        "\"Locked out again?\" he says. Again?",
+      choices: [
+        { text: "Ask to borrow his phone",         to: "locksmith" },
+        { text: "Ask to cut through to your yard",  to: "back_window" },
+        { text: "Ask if he'd like company. Forever.", to: "end_new_life" },
+      ],
+    },
+
+    /* ---------- LOCKSMITH BRANCH ---------- */
+    locksmith: {
+      text: "The locksmith answers on the first ring — never a good sign. \"Emergency callout is two-fifty, cash, be there in ten.\"",
+      choices: [
+        { text: "\"…Fine. Two-fifty.\"",           to: "end_locksmith" },
+        { text: "\"TWO-FIFTY?\" Hang up",           to: "wait" },
+      ],
+    },
+
+    /* ---------- WAITING BRANCH ---------- */
+    wait: {
+      text: "You lower yourself onto the step. The concrete is cold. A pigeon lands nearby and judges you openly.",
+      choices: [
+        { text: "Wait for your roommate to get home", to: "end_roommate" },
+        { text: "Pick the lock with a bobby pin",  to: "lockpick" },
+        { text: "Stand up. Walk toward the tree line.", to: "end_feral" },
+      ],
+    },
+    lockpick: {
+      text: "You saw this in a video once. You jam the bobby pin in and jiggle with the confidence of someone who has never once succeeded at anything mechanical.",
+      choices: [
+        { text: "Keep jiggling. You feel a click.", to: "end_lockpick_win" },
+        { text: "A police cruiser slows down…",    to: "end_arrested" },
+      ],
+    },
+
+    /* ---------- GARAGE BRANCH ---------- */
+    garage: {
+      text: "You walk over to the garage, the door might be locked but it is worth a shot.",
+      choices: [
+        { text: "Try opening the door",            to: "garage_interior" },
+        { text: "Nah, it's probably locked.",      to: "locked_out" },
+      ],
+    },
+    garage_interior: {
+      text: "By some miracle, the garage door wasn't locked, you enter the old, dusty garage.",
+      choices: [
+        { text: "Search the garage",               to: "end_garage_key" },
+      ],
+    },
+
+    /* ============================================================
+       ENDINGS
+       ============================================================ */
+    end_spare_key: {
+      ending: true, emoji: "🔑", name: "Spare Key Hero",
+      text: "It was a key. Dusty, cobwebbed, gloriously real. You let yourself in like you meant to do this the whole time.",
+    },
+    end_muddy_key: {
+      ending: true, emoji: "🪴", name: "Muddy Miracle",
+      text: "Six inches down, you strike metal. You're inside within a minute, tracking potting soil across the whole house. Worth it.",
+    },
+    end_broken_pot: {
+      ending: true, emoji: "🏺", name: "Property Damage",
+      text: "The pot explodes across the porch. No key. Just shards, dirt, and a geranium looking at you like you've changed. You're still locked out — now with cleanup.",
+    },
+    end_stuck_window: {
+      ending: true, emoji: "🪟", name: "The Human Cork",
+      text: "You are now wedged in your own kitchen window. Half in, half out, fully stuck. Dennis is taking a photo. This will outlive you both.",
+    },
+    end_window_win: {
+      ending: true, emoji: "😼", name: "Cat Burglar",
+      text: "You slide the window up and pour yourself over the sink like liquid. Smooth. Illegal-feeling. Home.",
+    },
+    end_balcony_win: {
+      ending: true, emoji: "🧗", name: "Second-Story Success",
+      text: "You catch the rail, haul yourself over, and the balcony door slides open like it was in on the plan. You are, briefly, an action hero.",
+    },
+    end_fall: {
+      ending: true, emoji: "🌳", name: "The Hedge Broke Your Fall",
+      text: "You fall. The hedge catches you with a sound like an angry salad. You're fine. You're leafy. You're still outside.",
+    },
+    end_new_life: {
+      ending: true, emoji: "🛋️", name: "Dennis's New Roommate",
+      text: "It's been three weeks. Dennis makes a solid lasagna. You've stopped mentioning your keys. This is your life now, and honestly the mug was right — he is the world's okayest gardener.",
+    },
+    end_locksmith: {
+      ending: true, emoji: "💸", name: "Cash Money",
+      text: "The lock turns in four seconds flat. Two hundred and fifty dollars, four seconds. You're inside, and you're broke, and you're never forgetting your keys again. (You will.)",
+    },
+    end_roommate: {
+      ending: true, emoji: "⏳", name: "The Long Wait",
+      text: "Three hours later, your roommate strolls up, keys jingling, and says \"oh, were you waiting?\" You have aged a decade. But you're in.",
+    },
+    end_feral: {
+      ending: true, emoji: "🐿️", name: "Feral",
+      text: "The forest is quiet. The squirrels are accepting. You never wanted a house anyway. You are the wind now. You are free.",
+    },
+    end_lockpick_win: {
+      ending: true, emoji: "🎯", name: "Lockpick Legend",
+      text: "The lock CLICKS. It actually clicks. You open the door and stand there stunned, holding a bent bobby pin like Excalibur. Tell no one how surprised you are.",
+    },
+    end_arrested: {
+      ending: true, emoji: "🚓", name: "Breaking & Entering (Your Own House)",
+      text: "\"It's MY house,\" you explain, for the fourth time, in the back of the cruiser. Nobody has your ID because it's inside. The house. That you're locked out of.",
+    },
+    end_garage_key: {
+      ending: true, emoji: "🚘🔑", name: "Garage Key",
+      text: "You search the garage and after a bit, you find a spare key in a box!",
+    },
+
+  },
+};
+
+/* ============================================================
+   ENGINE — you shouldn't need to edit below this line.
+   ============================================================ */
+
+const SAVE_KEY = "fyk:endings-found";
+const scenes = STORY.scenes;
+const stage = document.getElementById("stage");
+const matCount = document.getElementById("mat-count");
+const keyringBtn = document.getElementById("keyring-btn");
+
+const totalEndings = Object.values(scenes).filter(s => s.ending).length;
+let found = new Set();          // ids of endings discovered
+let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---- persistence: window.storage (in Claude) with graceful fallback ----
+   Self-hosting this file? Uncomment the localStorage lines below so your
+   keyring saves in a normal browser too. */
+async function loadFound() {
+  try {
+    if (window.storage) {
+      const r = await Promise.race([
+        window.storage.get(SAVE_KEY),
+        new Promise((_, rej) => setTimeout(() => rej(new Error("storage timeout")), 2000)),
+      ]);
+      if (r && r.value) return new Set(JSON.parse(r.value));
+    }
+    // else if (localStorage.getItem(SAVE_KEY)) return new Set(JSON.parse(localStorage.getItem(SAVE_KEY)));
+  } catch (e) {}
+  return new Set();
+}
+async function saveFound() {
+  const data = JSON.stringify([...found]);
+  try {
+    if (window.storage) await window.storage.set(SAVE_KEY, data);
+    // else localStorage.setItem(SAVE_KEY, data);
+  } catch (e) {}
+}
+
+function updateMat() {
+  matCount.textContent = found.size + " / " + totalEndings;
+}
+
+function renderStage(build) {
+  stage.classList.remove("enter");
+  stage.innerHTML = "";
+  build(stage);
+  if (!reduceMotion) { void stage.offsetWidth; stage.classList.add("enter"); }
+  window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+}
+
+function paragraphs(text) {
+  return text.split("\n\n").map(p => {
+    const el = document.createElement("p");
+    el.textContent = p;
+    return el;
+  });
+}
+
+function goto(id) {
+  const scene = scenes[id];
+  if (!scene) { console.error("Missing scene:", id); return; }
+  if (scene.ending) return showEnding(id, scene);
+  renderStage(root => {
+    const t = document.createElement("div");
+    t.className = "scene-text";
+    paragraphs(scene.text).forEach(p => t.appendChild(p));
+    root.appendChild(t);
+
+    const box = document.createElement("div");
+    box.className = "choices";
+    (scene.choices || []).forEach(c => {
+      const b = document.createElement("button");
+      b.className = "choice";
+      b.type = "button";
+      b.textContent = c.text;
+      b.addEventListener("click", () => goto(c.to));
+      box.appendChild(b);
+    });
+    root.appendChild(box);
+  });
+}
+
+async function showEnding(id, scene) {
+  const isNew = !found.has(id);
+  if (isNew) { found.add(id); updateMat(); await saveFound(); }
+
+  renderStage(root => {
+    const card = document.createElement("div");
+    card.className = "ending";
+    card.innerHTML =
+      '<div class="ending-emoji">' + (scene.emoji || "🔒") + '</div>' +
+      '<div class="ending-kicker">Ending Reached</div>' +
+      '<h2 class="ending-name">' + escapeHtml(scene.name || "The End") +
+        (isNew ? '<span class="badge-new">New key!</span>' : '') + '</h2>' +
+      '<p class="ending-text">' + escapeHtml(scene.text) + '</p>';
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const again = document.createElement("button");
+    again.className = "btn btn-primary";
+    again.type = "button";
+    again.textContent = "↩ Back to the door";
+    again.addEventListener("click", () => goto(STORY.start));
+
+    const ring = document.createElement("button");
+    ring.className = "btn";
+    ring.type = "button";
+    ring.textContent = "🔑 Open your keyring";
+    ring.addEventListener("click", showKeyring);
+
+    actions.append(again, ring);
+    card.appendChild(actions);
+    root.appendChild(card);
+  });
+}
+
+function showKeyring() {
+  const endings = Object.entries(scenes).filter(([, s]) => s.ending);
+  renderStage(root => {
+    const head = document.createElement("div");
+    head.innerHTML =
+      '<h2 class="title keyring-head">Your Keyring</h2>' +
+      '<p class="keyring-sub">' + found.size + ' of ' + totalEndings +
+        ' keys collected' + (found.size === totalEndings ? ' — every door opened. 🏆' : '') + '</p>';
+    root.appendChild(head);
+
+    const grid = document.createElement("div");
+    grid.className = "tags";
+    endings.forEach(([id, s]) => {
+      const got = found.has(id);
+      const tag = document.createElement("div");
+      tag.className = "tag " + (got ? "found" : "locked");
+      tag.innerHTML =
+        '<span class="tag-emoji">' + (got ? (s.emoji || "🔑") : "🔒") + '</span>' +
+        '<span class="tag-name">' + (got ? escapeHtml(s.name) : "???") + '</span>';
+      grid.appendChild(tag);
+    });
+    root.appendChild(grid);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    actions.style.marginTop = "26px";
+    const back = document.createElement("button");
+    back.className = "btn btn-primary";
+    back.type = "button";
+    back.textContent = "↩ Back to the door";
+    back.addEventListener("click", () => goto(STORY.start));
+    actions.appendChild(back);
+    root.appendChild(actions);
+
+    const reset = document.createElement("button");
+    reset.className = "reset";
+    reset.type = "button";
+    reset.textContent = "Reset keyring";
+    reset.addEventListener("click", async () => {
+      if (confirm("Forget every key you've collected? This can't be undone.")) {
+        found = new Set(); updateMat(); await saveFound(); showKeyring();
+      }
+    });
+    root.appendChild(reset);
+  });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+/* Load-time sanity check: prints broken links + unreachable scenes. */
+function validate() {
+  const ids = new Set(Object.keys(scenes));
+  const reachable = new Set();
+  const walk = id => {
+    if (!ids.has(id) || reachable.has(id)) return;
+    reachable.add(id);
+    (scenes[id].choices || []).forEach(c => walk(c.to));
+  };
+  walk(STORY.start);
+
+  Object.entries(scenes).forEach(([id, s]) => {
+    (s.choices || []).forEach(c => {
+      if (!ids.has(c.to)) console.warn(`⚠ "${id}" → "${c.to}" points to a scene that doesn't exist.`);
+    });
+  });
+  ids.forEach(id => {
+    if (!reachable.has(id)) console.warn(`⚠ "${id}" is never reachable from the start.`);
+  });
+  console.log(`✔ Forget Your Keys — ${ids.size} scenes, ${totalEndings} endings loaded.`);
+}
+
+keyringBtn.addEventListener("click", showKeyring);
+
+function init() {
+  updateMat();          // show the real total (0 / 13) right away
+  validate();
+  goto(STORY.start);    // draw the game without waiting on storage
+  loadFound().then(set => { found = set; updateMat(); }); // sync saved keys in background
+}
+init();
+</script>
+</body>
+</html>
