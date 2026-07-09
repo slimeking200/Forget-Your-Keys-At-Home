@@ -368,8 +368,15 @@ const STORY = {
       choices: [
         { text: "Climb to the balcony",            to: "balcony" },
         { text: "This is a terrible idea. Climb down", to: "neighbor" },
+        { text: "Climb to the roof",  to: "roof"},
       ],
     },
+     roof: {
+       text: "Despite the whole world trying to get you to fall, you make it to the roof. What now?",
+       choices: [
+         { text: "Crawl down the chimmney", to: "end_chimmney" },
+       ],
+     }
     balcony: {
       text: "Halfway up, the ladder shifts. You freeze. The balcony door is right there — and it looks unlocked.",
       choices: [
@@ -377,7 +384,12 @@ const STORY = {
         { text: "Your foot slips",                 to: "end_fall" },
       ],
     },
-
+     end_chimmney: {
+       ending: true,
+       name: "Ho, Ho, Ho!",
+       emoji: "🔑",            // optional, purely decorative
+       text: "After a lot of extremely painful acrobattics, you manage to get through the chimmney back into your house.",
+     }
     /* ---------- NEIGHBOR BRANCH ---------- */
     neighbor: {
       text:
