@@ -508,11 +508,28 @@ const totalEndings = Object.values(scenes).filter(s => s.ending).length;
 let found = new Set();          // ids of endings discovered
 let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---- persistence: window.storage (in Claude) with graceful fallback ----
-   Self-hosting this file? Uncomment the localStorage lines below so your
-   keyring saves in a normal browser too. */
+/* ---- Progress saving --------------------------------------------------
+   Collected endings are saved automatically and persist after you close the
+   tab. Uses the browser's localStorage on a normal website (GitHub Pages),
+   and falls back to Claude's artifact storage when previewed inside Claude.
+   No setup needed either way. */
+
+// Does localStorage actually work here? (Some sandboxes block it.)
+const LS_OK = (() => {
+  try {
+    const k = "__fyk_test__";
+    localStorage.setItem(k, "1");
+    localStorage.removeItem(k);
+    return true;
+  } catch (e) { return false; }
+})();
+
 async function loadFound() {
   try {
+    if (LS_OK) {
+      const raw = localStorage.getItem(SAVE_KEY);
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    }
     if (window.storage) {
       const r = await Promise.race([
         window.storage.get(SAVE_KEY),
@@ -520,15 +537,15 @@ async function loadFound() {
       ]);
       if (r && r.value) return new Set(JSON.parse(r.value));
     }
-    // else if (localStorage.getItem(SAVE_KEY)) return new Set(JSON.parse(localStorage.getItem(SAVE_KEY)));
   } catch (e) {}
   return new Set();
 }
+
 async function saveFound() {
   const data = JSON.stringify([...found]);
   try {
+    if (LS_OK) { localStorage.setItem(SAVE_KEY, data); return; }
     if (window.storage) await window.storage.set(SAVE_KEY, data);
-    // else localStorage.setItem(SAVE_KEY, data);
   } catch (e) {}
 }
 
