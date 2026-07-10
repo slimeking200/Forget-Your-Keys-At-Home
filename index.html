@@ -318,8 +318,16 @@ const STORY = {
          choices: [
            { text: "Search the fire pit", to: "fire_pit" },
            { text: "Head back to the door", to: "locked_out" },
+           { text: "Search the yard thoroughly", to: "holeintheground" },
          ],
        },
+       holeintheground: {
+         text: "While searching, you discover a hole dug by some sort of animal. There is something shining within.",
+         choices: [
+           { text: "Grab it", to: "end_holekey" },
+           { text: "Probably nothing,let's leave it alone.", to: "backyard" },
+         ],
+       }
        fire_pit: {
          text: "You approach the fire pit, something is glistening in the ashes.",
          choices: [
@@ -332,6 +340,12 @@ const STORY = {
        emoji: "🔑🔥",            // optional, purely decorative
        text: "Amist all the soot and ash, you find a key! covered in soot, you unlock your door and enter your home.",
      },
+     end_holekey: {
+       ending: true,
+       name: "Buried Key",
+       emoji: "🔑🕳️",            // optional, purely decorative
+       text: "You pick up the shining object which to your surprise, is a shiny metal key!",
+     }
      end_bump_head: {
        ending: true,
        name: "Ambulance Ending",
@@ -407,7 +421,7 @@ const STORY = {
      end_chimmney: {
        ending: true,
        name: "Ho, Ho, Ho!",
-       emoji: "🔑",            // optional, purely decorative
+       emoji: "🎅🏻",            // optional, purely decorative
        text: "After a lot of extremely painful acrobattics, you manage to get through the chimmney back into your house.",
      },
     
