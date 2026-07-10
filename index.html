@@ -310,8 +310,27 @@ const STORY = {
         { text: "Grab the key",                    to: "end_spare_key" },
         { text: "It's a spider. Try the flowerpot", to: "flowerpot" },
         { text: "Move your head back to get a closer look", to: "end_bump_head"},
+        { text: "Search the backyard",               to: "backyard"},
       ],
     },
+       backyard: {
+         text: "You walk over to the backyard, where would you like to search first?",
+         choices: [
+           { text: "Search the fire pit", to: "fire_pit" },
+         ],
+       },
+       fire_pit: {
+         text: "You approach the fire pit, something is glistening in the ashes.",
+         choices: [
+           { text: "Investigate the glistening object", to: "end_firepit_key" },
+         ],
+       },
+     end_firepit_key: {
+       ending: true,
+       name: "Key In The Fire",
+       emoji: "🔑🔥",            // optional, purely decorative
+       text: "Amist all the soot and ash, you find a key! covered in soot, you unlock your door and enter your home.",
+     },
      end_bump_head: {
        ending: true,
        name: "Ambulance Ending",
